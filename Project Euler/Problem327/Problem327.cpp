@@ -2,38 +2,24 @@
 //
 
 #include <iostream>
-#include <vector>   // howManyCards() needs this
+#include <vector>   // transport() needs this
+#include <cmath>	// round()
+#include <stdexcept>
 
 using namespace std;
 
-// calculate how many cards we need to get through r rooms with card limit c
-int howManyCards(int c, int r);
+const int cardLimit = 3;	// this many cards may be held at once
+const int doors = 8;		// rooms+1
+const int reach = ceil((double) cardLimit / 2) - 1;	// we can carry one card this far and go back to where we came from
+int load = reach % 2 == 0 ? 2 : 1;					// if reach is a even number, we can carry two cards at once, else one
 
-// calculate how many cards we need to bring x cards into a room r rooms ahead going room-by-room with card limit c
-int bringCards(int x, int r, int c)
-{
-    if (r == 1)
-        return 2 * x / (c - 2);
-    else
-        return 2 * bringCards(x, r-1, c) / (c-2);
-}
+vector<int> B(doors, 0);	// represents the actual value of cards in the boxes (B for box)
+vector<int> N(doors, 0);	// represents the debit value of cards in the boxes (N for neccessary)
+
+// find out how many cards must be at least
+void setN();
 
 int main()
 {
-    int r = 6;
-    int c = 3;
-    cout << "to travel through " << r << " rooms with a card limit of " << c << " you need at least " << howManyCards(c, r) << " cards";
 
-    for (int r = 1; r < 10; r++)
-        cout << bringCards(1, r, 3) << endl;
-}
-
-int howManyCards(int c, int r)
-{
-    // the return value: the minimum of cards we need
-    int minC = r - c + 1;   // at the end we run through
-    
-    int heavyR = minC;  // ...
-
-    return bringCards(c-1, heavyR, c) + c + 1;
 }
