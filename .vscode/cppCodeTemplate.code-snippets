@@ -1,0 +1,70 @@
+{
+	// Place your ProjectEuler workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+}
+
+	"Start coding template": {
+		"scope": "c++",
+		"isFileTemplate": true,
+		"prefix": "template",
+		"body": [
+			"
+			/**
+			 * COMPILE: clang++ -std=c++20 -o main -O2 main.cpp
+			 * RUN:     ./main
+			*/
+			
+			#include <iostream>
+			using std::cout;
+			using std::endl;
+			
+			#include <iomanip>
+			
+			double solve(int n);
+			
+			void runProblem();
+			
+			void runTest();
+			
+			int main()
+			{
+				runTest();
+			
+				return 0;
+			}
+			
+			double solve(int n)
+			{
+				return n;
+			}
+			
+			void runProblem()
+			{
+				
+			}
+			
+			void runTest()
+			{
+				int n = 10;
+				double solution = solve(n);
+			
+				cout << \"Expected ..., got \" << std::setprecision(10) << solution << endl;
+			}
+			"
+		],
+		"description": "startup file template for Project Euler code"
+	}
