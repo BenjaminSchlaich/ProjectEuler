@@ -6,16 +6,8 @@
 
 using namespace std;
 
-int coins[8] = {1, 2, 5, 10, 20, 50, 100, 200};
-int hashBase[8] = {2, 3, 5, 7, 11, 13, 17, 19};
-int ways[8] = {1, 2, 4, 11, 22, 55, 110, 220};
-
-int wayS = 0;
-
-void combine()
-{
-
-}
+int nCoins = 8;
+int coins[8] = {200, 100, 50, 20, 10, 5, 2, 1};
 
 int main()
 {
