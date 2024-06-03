@@ -20,7 +20,7 @@ void spacer();
 
 int main(int argc, char *argv[])
 {
-    /*
+    ///*
     solve(100);
 
     spacer();
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     solve(1000000);//*/
 
-    timePrimeChecks();
+    // timePrimeChecks();
 
     return 0;
 }
@@ -101,22 +101,15 @@ void timePrimeChecks()
         unsigned long countLookup = 0;
 
         // find the correct starting position for the prime lookup, to be fair
-        vector<unsigned long>::iterator pBegin = primes.begin();
-        while(*pBegin < start)
-            pBegin++;
+        auto pStart = lower_bound(primes.begin(), primes.end(), start);
         
         // find the correct ending position, too...
-        vector<unsigned long>::reverse_iterator pEndR = primes.rend();
-        while(*pEndR > end)
-            pEndR++;
-        
-        // compute the actual iterator of that position
-        vector<unsigned long>::iterator pEnd = pEndR.base();
+        auto pEnd = upper_bound(primes.begin(), primes.end(), end);
 
         t0 = chrono::high_resolution_clock::now();
 
         for(unsigned long n: samples)
-            if(binary_search(pBegin, pEnd, n))
+            if(binary_search(pStart, pEnd, n))
                 countLookup++;
         
         t1 = chrono::high_resolution_clock::now();
@@ -170,7 +163,7 @@ void solve(int limit)
         for(int j=0; j<i - longestRange; j++)                                                       // only look for better ranges
             if(prefixSums.at(i) - prefixSums.at(j) >= limit)
                 continue;
-            else if(i - j > longestRange && isPrime(prefixSums.at(i) - prefixSums.at(j)))                                        
+            else if(binary_search(primes.begin(), primes.end(), prefixSums.at(i) - prefixSums.at(j)))                                        
             {
                 longestRange = i - j;
                 bestPrime = prefixSums.at(i) - prefixSums.at(j);
