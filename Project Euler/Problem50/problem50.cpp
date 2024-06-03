@@ -161,12 +161,7 @@ void solve(int limit)
         // the j-th prefix-sum must be at least big enough, that when subtracted from the i-th, the result is smaller than limit:
         //      prefixSums.at(i) - prefixSums.at(j) < limit <=> -prefixSums.at(j) < limit - prefixSums.at(i)
         // <=>  prefixSums.at(j) > prefixSums.at(i) - limit
-        vector<long>::iterator sumStart;
-
-        if(*i >= limit)
-            sumStart = lower_bound(prefixSums.begin(), i, *i - limit);
-        else
-            sumStart = prefixSums.begin();
+        vector<long>::iterator sumStart = lower_bound(prefixSums.begin(), i, *i - limit);
 
         // as lower_bound only ensures prefixSums.at(j) >= prefixSums.at(i) - limit, but <limit> is not included:
         if(*i - *sumStart == limit)
