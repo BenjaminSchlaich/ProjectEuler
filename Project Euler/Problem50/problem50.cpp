@@ -144,7 +144,7 @@ void solve(int limit)
     
     cout << "There are " << primes.size() << " primes below " << limit << endl;
 
-    vector<unsigned long> prefixSums(primes.size() + 1);
+    vector<long> prefixSums(primes.size() + 1);
 
     prefixSums.at(0) = 0;
 
@@ -155,33 +155,35 @@ void solve(int limit)
 
     int longestRange = 0;
     int bestPrime = 0;
-    int bestI = 0;
-    int bestJ = 0;
 
-    for(int i=1; i<prefixSums.size(); i++)
+    for(auto i=prefixSums.begin() + 1; i != prefixSums.end(); i++)
     {
-        for(int j=0; j<i - longestRange; j++)                                                       // only look for better ranges
-            if(prefixSums.at(i) - prefixSums.at(j) >= limit)
-                continue;
-            else if(binary_search(primes.begin(), primes.end(), prefixSums.at(i) - prefixSums.at(j)))                                        
+        // the j-th prefix-sum must be at least big enough, that when subtracted from the i-th, the result is smaller than limit:
+        //      prefixSums.at(i) - prefixSums.at(j) < limit <=> -prefixSums.at(j) < limit - prefixSums.at(i)
+        // <=>  prefixSums.at(j) > prefixSums.at(i) - limit
+        vector<long>::iterator sumStart;
+
+        if(*i >= limit)
+            sumStart = lower_bound(prefixSums.begin(), i, *i - limit);
+        else
+            sumStart = prefixSums.begin();
+
+        // as lower_bound only ensures prefixSums.at(j) >= prefixSums.at(i) - limit, but <limit> is not included:
+        if(*i - *sumStart == limit)
+            sumStart++;
+        
+        // there must be at least as many elements in the sum, as in the best that we've found so far:
+        vector<long>::iterator sumEnd = i - longestRange;
+        
+        for(auto j=sumStart; j<sumEnd; j++)                                                       // only look for better ranges
+            if(binary_search(primes.begin(), primes.end(), *i - *j))                                        
             {
                 longestRange = i - j;
-                bestPrime = prefixSums.at(i) - prefixSums.at(j);
-                bestI = i;
-                bestJ = j;
+                bestPrime = *i - *j;
             }
     }
 
-    cout << endl << "The best prime below " << limit << " is " << bestPrime << ", as it can be summed up from " << longestRange << " consecutive primes:" << endl;
-
-    if(longestRange < 100)
-    {
-        // for confusion avoidance: the primes up to (including) the j-th prime are excluded, put primes.at(bestJ) is the bestJ+1-th prime!
-        for(int i = bestJ; i < bestI-1; i++)
-            cout << primes.at(i) << " + ";
-        
-        cout << primes.at(bestI-1) << " = " << bestPrime << endl;
-    }
+    cout << endl << "The best prime below " << limit << " is " << bestPrime << ", as it can be summed up from " << longestRange << " consecutive primes." << endl;
 
     return;
 }
