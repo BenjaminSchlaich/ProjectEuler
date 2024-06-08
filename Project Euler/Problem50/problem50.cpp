@@ -16,8 +16,6 @@ void timePrimeChecks();
 
 void solve(int limit);
 
-void spacer();
-
 int main(int argc, char *argv[])
 {
     ///*
@@ -122,16 +120,6 @@ void timePrimeChecks()
 
         spacer();
     }
-}
-
-void spacer()
-{
-    cout << endl << endl << endl;
-
-    for(int i=0; i<100; i++)
-        cout << '-';
-    
-    cout << endl << endl << endl << endl;
 }
 
 void solve(int limit)

@@ -1,16 +1,6 @@
 
 import Useful
-import Data.List (partition, sort)
-
--- helper method for equivalence classes
-splitOffFirstGroup :: (a -> a -> Bool) -> [a] -> ([a],[a])
-splitOffFirstGroup equal xs@(x:_) = partition (equal x) xs
-splitOffFirstGroup _     []       = ([],[])
-
--- find equivalence classes for a given equivalence relation <equal> on a list/set <xs>
-equivalenceClasses _     [] = []
-equivalenceClasses equal xs = let (fg,rst) = splitOffFirstGroup equal xs
-                              in fg : equivalenceClasses equal rst
+import Data.List (sort)
 
 questionable = filter isPrime [1000..9999]
 
