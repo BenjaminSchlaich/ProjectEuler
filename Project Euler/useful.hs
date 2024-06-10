@@ -7,7 +7,8 @@ module Useful
     isPermutation,
     factorial,
     binCoeff,
-    equivalenceClasses
+    equivalenceClasses,
+    isPalindrome
 ) where
 
 import Data.List ((\\), partition)
@@ -53,3 +54,6 @@ equivalenceClasses _     [] = []
 equivalenceClasses equal xs = let (fg,rst) = splitOffFirstGroup equal xs
                               in fg : equivalenceClasses equal rst
 
+-- checks whether the given number is a palindrome
+isPalindrome :: Integer -> Bool
+isPalindrome n = show n == (reverse $ show n)

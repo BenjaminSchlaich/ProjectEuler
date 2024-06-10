@@ -2,10 +2,10 @@
 #include "useful.hpp"
 
 #include <cmath>
-
 #include <algorithm>
-
 #include <iostream>
+#include <vector>
+#include <unordered_map>
 
 void spacer(int newlines)
 {
@@ -119,3 +119,5 @@ void primesieve::setStepsize(long stepSize)
 {
     primesieve::stepSize = stepSize;
 }
+
+template std::ostream &operator<<(std::ostream &os, std::vector<int> v);
