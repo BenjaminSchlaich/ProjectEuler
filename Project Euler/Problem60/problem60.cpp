@@ -9,8 +9,12 @@
 
 using namespace std;
 
-static const int limit = 10000;
-static vector<int> primes;
+static const int limit = 100000000;
+
+inline int max(int a, int b)
+{
+    return a > b ? a : b;
+}
 
 // performs a lookup in the primes table
 bool primecheck(int n);
@@ -23,50 +27,74 @@ void solve(int N);
 
 int main()
 {
-    // precompute primes:
-    for(int n=2; n<=limit; n++)
-        if(isPrime(n))
-            primes.push_back(n);
+    // precompute primes below 10^9
+    primesieve::setStepsize(limit/100);
+    primesieve::isPrime(limit);
     
-    cout << "precomputed " << primes.size() << " primes up to " << limit << "." << endl;
+    cout << "precomputed primes up to excluding " << limit << "." << endl;
 
-    solve(4);
+    solve(5);
 
     return 0;
 }
 
 void solve(int N)
 {
-    // now find the set
-    unordered_map<int, vector<int>> combis;
+    int maxSetSize = 1;
+    int orderOfMagnitude = 10;
+    int minSetSum = std::numeric_limits<int>::max();
+    list<list<int>> sets;
+    auto itP = primesieve::knownPrimes().begin();
 
-    // find pairs for primes
-    for(auto it=primes.begin(); it != primes.end(); it++)
+    while(itP != primesieve::knownPrimes().end() && (maxSetSize <= N /*|| *itP < minSetSum*/))  // the best set cannot contain a prime larger that the current best sum
     {
-        for(auto it2=it+1; it2 != primes.end(); it2++)
+        list<list<int>> newSets;
+        list<int> l;
+        l.push_back(*itP);
+        newSets.push_back(l);               // first value is the sum of the set
+        newSets.front().push_back(*itP);    // then come the values
+
+        for(auto s: sets)
         {
-            if(primePair(*it, *it2))
+            bool prop = true;
+
+            for(auto p = next(s.begin()); p != s.end(); p++)
+                if(!primePair(*p, *itP))
+                {
+                    prop = false;
+                    break;
+                }
+            
+            if(prop)
             {
-                if(!combis.contains(*it))
-                    combis.insert({*it, {*it2}});
-                else
-                    combis.at(*it).push_back(*it2);
+                list<int> ss(s);        // we can extend the old set to form a new one
+                ss.push_back(*itP);     // add the new prime to the set
+                ss.front() += *itP;     // update the sum, too
+
+                maxSetSize = max(maxSetSize, ss.size());
+
+                if(ss.size() == N+1)
+                    minSetSum = min(minSetSum, ss.front());
+                
+                newSets.push_back(ss);
             }
         }
+
+        sets.append_range(newSets);
+
+        if(*itP > orderOfMagnitude)
+        {
+            cout << "prime done: " << *itP << ", #sets: " << sets.size() << ", largest set: " << maxSetSize << endl;
+            orderOfMagnitude *= 10;
+        }
+
+        itP++;
     }
 
-    auto it = combis.begin();
-
-    while(it != combis.end())
-        if(it->second.size() < N - 1)
-            it = combis.erase(it);
-        else
-            it++;
-
-    cout << "There are " << combis.size() << " primes with at least " << N << " pairs:" << endl;
-
-    for(auto pair: combis)
-        cout << pair.first << ": " << pair.second << endl;
+    if(minSetSum == numeric_limits<int>::max())
+        cout << "no solution found, more primes are necessary." << endl;
+    else
+        cout << "lowest sum: " << minSetSum << endl;
 }
 
 bool primePair(int p, int q)
@@ -76,5 +104,8 @@ bool primePair(int p, int q)
 
 bool primecheck(int n)
 {
-    return binary_search(primes.begin(), primes.end(), n);
+    if(n >= limit)
+        return isPrime(n);
+    else
+        return primesieve::isPrime(n);
 }

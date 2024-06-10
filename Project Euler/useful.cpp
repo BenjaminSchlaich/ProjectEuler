@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <list>
 #include <unordered_map>
 
 void spacer(int newlines)
@@ -120,4 +121,10 @@ void primesieve::setStepsize(long stepSize)
     primesieve::stepSize = stepSize;
 }
 
+const std::vector<long> &primesieve::knownPrimes()
+{
+    return primes;
+}
+
 template std::ostream &operator<<(std::ostream &os, std::vector<int> v);
+template std::ostream &operator<<(std::ostream &os, std::list<int> v);

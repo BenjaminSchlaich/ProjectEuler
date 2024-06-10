@@ -25,15 +25,17 @@ class primesieve
 {
     public:
 
-    static bool isPrime(long n);            // returns true if n is a prime number.
+    static bool isPrime(long n);                    // returns true if n is a prime number.
 
-    static void setStepsize(long stepSize); // update the stepsize to be used for future augmentations
+    static void setStepsize(long stepSize);         // update the stepsize to be used for future augmentations
+
+    static const std::vector<long> &knownPrimes();  // returns the currently known primes.
 
     private:
 
-    static long stepSize;                   // by how much to increase the range of the sieve, when asked for a number that occurred already.
+    static long stepSize;                       // by how much to increase the range of the sieve, when asked for a number that occurred already.
 
-    static long limit;                      // the current limit of the sieve (initially == stepsize)
+    static long limit;                          // the current limit of the sieve (initially == stepsize)
 
-    static std::vector<long> primes;        // all primes that have been found so far.
+    static std::vector<long> primes;            // all primes that have been found so far.
 };
