@@ -2,7 +2,7 @@
 /**
  * To build the project, enter the following lines one after another into the terminal:
  * libraryOptions="-L/Users/benjamin/Downloads/msieve-master -lmsieve -lgmp -lm -lpthread -I/Users/benjamin/Downloads/msieve-master/include"
- * build="clang++ $libraryOptions -std=c++2b -o Problem351/problem351 useful.cpp Problem351/problem351.cpp"
+ * build="clang++ -std=c++2b -o Problem351/problem351 useful.cpp Problem351/problem351.cpp"
  * eval $build
  * 
  * To run the built executable, enter the following:
@@ -16,9 +16,6 @@
 #include <string>
 
 #include "../useful.hpp"
-
-#include <msieve.h>
-#include <util.h>
 
 using namespace std;
 
@@ -44,6 +41,9 @@ fraction simplify(const fraction &fraction);
 
 // print a fraction
 ostream &operator<<(ostream &os, fraction p);
+
+// precompute euler's totient function (phi) up to (incl.) <limit> and save it to the vector that is returned.
+vector<long> findPhi(long limit);
 
 // this works but only in O(N^2), which is far too slow for N=100'000'000!
 int simpleH(int N)
@@ -89,10 +89,17 @@ long phi(long n)
 // O(n*sqrt(n)), still far too slow!
 long S(long N)
 {
+    cout << "running S()..." << endl;
+    cout << "precomputing phi up to " << N << "..." << endl;
+
+    auto ph = findPhi(N);
+
+    cout << "phi fully computed." << endl;
+
     long hidden = 0;
 
     for(long k=2; k<=N; k++)
-        hidden += k - phi(k) - 1;
+        hidden += k - ph.at(k) - 1;
     
     return (hidden + (N - 1)) * 6;
 }
@@ -139,58 +146,48 @@ void plotS()
     ofsS.close();
 }
 
-vector<long> do_factor(long n)
-{
-    char *nStr = new char[to_string(n).size()];
-
-    uint32 randomSeed1 = rand();
-    uint32 randomSeed2 = rand();
-    uint32 maxRelations = 0;
-    uint32 nfsLower = 0;
-    uint32 nfsUpper = 0;
-    uint32 l1CacheSize, l2CacheSize;
-    char *savefileName = MSIEVE_DEFAULT_SAVEFILE;
-    char *logfileName = MSIEVE_DEFAULT_LOGFILE;
-    char *bfileName = MSIEVE_DEFAULT_NFS_FBFILE;
-
-    get_cache_sizes(&l1CacheSize, &l2CacheSize);
-    
-    msieve_obj *mso = msieve_obj_new(nStr, 0, savefileName
-                                    , logfileName, bfileName, randomSeed1
-                                    , randomSeed2, maxRelations, nfsLower
-                                    , nfsUpper, cpu_generic, l1CacheSize
-                                    , l2CacheSize, 0, 0
-                                    , 0);
-    
-    msieve_run(mso);
-
-    msieve_factor *f = mso->factors;
-
-    vector<long> facts;
-
-    while(f != nullptr)
-    {
-        facts.push_back(stol(f->number));
-        f = f->next;
-    }
-
-    return facts;
-}
-
 int main(int argc, char *argv[])
 {
-    long n = stol(argv[1]);
+    long N = 100000000;
 
-    cout << "Factorizing " << n << "..." << endl;
+    cout << "computing S(" << N << ")..." << endl;
 
-    auto fs = do_factor(n);
+    long s = S(N);
 
-    cout << "Result:" << endl;
-
-    for(long l: fs)
-        cout << l << endl;
-
+    cout << "result: " << s << endl;
+    
     return 0;
+}
+
+vector<long> findPhi(long limit)
+{
+    vector<long> v(limit+1, 1);
+
+    for(long n=2; n<=limit; n++)
+    {
+        if(v.at(n) == 1)
+        {
+            long m=n;
+
+            while(m <= limit)
+            {
+                long e=0;
+                long l = m;
+
+                do
+                {
+                    l = l/n;
+                    e++;
+                } while(l % n == 0);
+
+                v.at(m) *= (n-1) * power(n, e-1);
+
+                m += n;
+            }
+        }
+    }
+
+    return v;
 }
 
 int gcd(int a, int b)
