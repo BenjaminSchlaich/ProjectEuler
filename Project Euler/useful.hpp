@@ -8,12 +8,24 @@
 // nice for printing some space
 void spacer(int newlines = 3);
 
+/**
 // allows printing of iterable classes as an array.
 template <std::ranges::range T>
 std::ostream &operator<<(std::ostream &os, T r);
+*/
+
+// simple integer exponentiation
+long power(long n, long e);
 
 // simple prime check in O(sqrt(n)) complexity.
 bool isPrime(int n);
+
+// number of proper (not 1 or n) divisors in O(sqrt(n))
+long properDivisors(long n);
+
+std::vector<std::pair<long, long>> primeFactorization(long n);
+
+std::string factorizationToString(std::vector<std::pair<long, long>> f);
 
 /**
  * Erathosthenes prime sieve that caches primes in a static class.

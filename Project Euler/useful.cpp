@@ -38,6 +38,19 @@ std::ostream &operator<<(std::ostream &os, T r)
     return os;
 }
 
+long power(long n, long e)
+{
+    long p = 1;
+
+    while(e > 0)
+    {
+        p *= n;
+        e--;
+    }
+
+    return p;
+}
+
 bool isPrime(int n)
 {
     if(n < 2)
@@ -59,6 +72,93 @@ bool isPrime(int n)
 long primesieve::stepSize = 1000000;                        // this can be any number >= 1
 long primesieve::limit = 2;                                 // this must be 2, for the whole algorithm to work!
 std::vector<long> primesieve::primes = std::vector<long>();
+
+long properDivisors(long n)
+{
+    if(n <= 2)
+        return 0;
+
+    int count = 0;
+
+    for(int k=2; k*k<=n; k++)
+        if(n % k == 0)
+            count++;
+    
+    return count;
+}
+
+std::vector<std::pair<long, long>> primeFactorization(long n)
+{
+    if(n < 2)
+        return {};
+    else if( n == 2)
+        return {{2, 1}};
+    
+    std::vector<std::pair<long, long>> factorization;
+
+    if(n % 2 == 0)
+    {
+        factorization.push_back({2, 0});
+
+        while(n % 2 == 0)
+        {
+            factorization.back().second++;
+            n /= 2;
+        }
+    }
+
+    if(n % 3 == 0)
+    {
+        factorization.push_back({3, 0});
+
+        while(n % 3 == 0)
+        {
+            factorization.back().second++;
+            n /= 3;
+        }
+    }
+
+    int k = 5;
+    bool add2 = true;
+
+    while(n > 1)
+    {
+        if(n % k == 0)
+        {
+            factorization.push_back({k, 0});
+
+            while(n % k == 0)
+            {
+                factorization.back().second++;
+                n /= k;
+            }
+        }
+
+        if(add2)
+            k += 2;
+        else
+            k += 4;
+        
+        add2 = !add2;
+    }
+
+    return factorization;
+}
+
+std::string factorizationToString(std::vector<std::pair<long, long>> f)
+{
+    std::string s = "{";
+
+    for(int i=0; i<f.size(); i++)
+    {
+        s += std::to_string(f.at(i).first) + "^" + std::to_string(f.at(i).second);
+
+        if(i < f.size()-1)
+            s += " * ";
+    }
+
+    return s + "}";
+}
 
 bool primesieve::isPrime(long n)
 {
