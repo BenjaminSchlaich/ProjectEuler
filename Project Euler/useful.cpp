@@ -20,24 +20,6 @@ void spacer(int newlines)
         std::cout << std::endl;
 }
 
-template <std::ranges::range T>
-std::ostream &operator<<(std::ostream &os, T r)
-{
-    os << "[";
-
-    auto it = r.begin();
-
-    if(it != r.end())
-        os << *it++;
-    
-    while(it != r.end())
-        os << " ," << *it++;
-    
-    os << "]";
-
-    return os;
-}
-
 long power(long n, long e)
 {
     long p = 1;
@@ -226,5 +208,111 @@ const std::vector<long> &primesieve::knownPrimes()
     return primes;
 }
 
-template std::ostream &operator<<(std::ostream &os, std::vector<int> v);
-template std::ostream &operator<<(std::ostream &os, std::list<int> v);
+std::ostream &operator<<(std::ostream &os, std::list<int> &l)
+{
+    os << "[";
+
+    for(auto it=l.begin(); it!=l.end(); it++)
+        os << *it << (next(it) != l.end() ? ", " : "");
+    
+    os << "]";
+
+    return os;
+}
+
+std::list<std::string> permutations(std::string s)
+{
+    if(s.empty())
+        return {""};
+    
+    std::list<std::string> ps;
+
+    for(auto it=s.begin(); it!=s.end(); it++)
+    {
+        char c = *it;
+
+        s.erase(it);
+
+        std::list<std::string> ss = permutations(s);
+
+        for(auto &s: ss)
+            s.insert(s.begin(), c);
+        
+        ps.append_range(ss);
+
+        s.insert(it, c);
+    }
+
+    return ps;
+}
+
+bool isPermutation(std::string s1, std::string s2)
+{
+    if(s1.size() != s2.size())
+        return false;
+    
+    for(char c: s1)
+    {
+        bool found = false;
+
+        for(auto it=s2.begin(); it!=s2.end(); it++)
+            if(*it == c)
+            {
+                s2.erase(it);
+                found = true;
+                break;
+            }
+        
+        if(!found)
+            return false;
+    }
+
+    return true;
+}
+
+std::vector<long> findPhi(long limit)
+{
+    std::vector<long> v(limit+1, 1);
+
+    for(long n=2; n<=limit; n++)
+    {
+        if(v.at(n) == 1)
+        {
+            long m=n;
+
+            while(m <= limit)
+            {
+                long e=0;
+                long l = m;
+
+                do
+                {
+                    l = l/n;
+                    e++;
+                } while(l % n == 0);
+
+                v.at(m) *= (n-1) * power(n, e-1);
+
+                m += n;
+            }
+        }
+    }
+
+    return v;
+}
+
+long safegcd(long a, long b)
+{
+    if(b == 0)
+        return a;
+    else
+        return safegcd(b, a % b);
+}
+
+long gcd(long a, long b)
+{
+    if(a > b)
+        return safegcd(a, b);
+    else
+        return safegcd(b, a);
+}

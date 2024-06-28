@@ -4,15 +4,22 @@
 #include <fstream>
 #include <ranges>
 #include <vector>
+#include <list>
+
+// print integer list
+std::ostream &operator<<(std::ostream &os, std::list<int> &l);
+
+// precomputes euler's totient function (phi) for n ∈ {1, ..., limit} and stores it in the result vector.
+std::vector<long> findPhi(long limit);
+
+// returns a list of all permutations of s, including s (identity).
+std::list<std::string> permutations(std::string s);
+
+// checks whether one string is a permutation of the other
+bool isPermutation(std::string s1, std::string s2);
 
 // nice for printing some space
 void spacer(int newlines = 3);
-
-/**
-// allows printing of iterable classes as an array.
-template <std::ranges::range T>
-std::ostream &operator<<(std::ostream &os, T r);
-*/
 
 // simple integer exponentiation
 long power(long n, long e);
@@ -22,6 +29,9 @@ bool isPrime(int n);
 
 // number of proper (not 1 or n) divisors in O(sqrt(n))
 long properDivisors(long n);
+
+// euclid's algorithm to compute greatest common divisor
+long gcd(long a, long b);
 
 std::vector<std::pair<long, long>> primeFactorization(long n);
 
