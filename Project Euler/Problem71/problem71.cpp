@@ -58,7 +58,7 @@ fraction lowerBound(fraction f0, long d)
     long n=1;
     long rangemax = 1;
     
-    while(fraction({n, d}) < f0)             // exponential search for the upper bound
+    while(fraction({n, d}) <= f0)             // exponential search for the upper bound
         rangemax = (n *= 2);
     
     if(n == 1)
@@ -104,45 +104,12 @@ int main()
 
     const fraction limit = {3, 7};
 
-    for(long d=dMax; d>1; d--)
+    for(long d=dMax; d>2; d--)
     {
         // perform exponential/binary search for each denominator, to find the closest enumerator
-        long n=1;
-        long rangemax = 1;
-        
-        while(fraction({n, d}) < limit)
-            rangemax = (n *= 2);
-        
-        if(n == 1)
-            continue;
-        else
-            n /= 2;
-        
-        int rangemin = n;                                           // we just made sure that n/d <= limit
+        fraction f = lowerBound(limit, d);
 
-        while(rangemax - rangemin >= 10)                            // cutoff for linear vs binary search
-        {
-            n = (rangemin + rangemax) / 2;
-
-            if(fraction({n, d}) < limit)
-                rangemin = n;
-            else
-                rangemax = n;
-        }
-
-        n = rangemin;
-
-        while(n < rangemax)
-        {
-            fraction f({n+1, d});
-
-            if(!(limit <= f))
-                n++;
-            else
-                break;
-        }
-
-        s.insert({n, d});
+        s.insert(f);
     }
     
     cout << "solution: " << *s.rbegin() << endl;

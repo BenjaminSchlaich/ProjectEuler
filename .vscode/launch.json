@@ -8,7 +8,7 @@
             "name": "(lldb) Starten",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Project Euler/Problem71/problem71",
+            "program": "${workspaceFolder}/Project Euler/Problem74/problem74",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
