@@ -1,7 +1,6 @@
 
 #include <iostream>
 #include <vector>
-#include <chrono>
 
 using namespace std;
 
@@ -24,7 +23,7 @@ int iterate(int n)
 
 struct map
 {
-    vector<pair<int, int>> v;       // first int: next integer in sequence. second int: length of non-repeating elements
+    vector<pair<int, int>> v;
 
     map(size_t N)
     {
@@ -59,7 +58,6 @@ struct map
 
     int &getDistance(int i)
     {
-        // return m.at(i).distance;
         return v.at(i).second;
     }
 };
@@ -80,7 +78,7 @@ void find(int n, map &m)
 
     int circleLength = 0;
 
-    if(!m.isComplete(next))     // circle
+    if(!m.isComplete(next))
     {
         circleLength = - (d - m.getDistance(next));
 
@@ -113,12 +111,10 @@ void find(int n, map &m)
     }
 }
 
-void solve()
+int main()
 {
     const int N = 999999;
-
     map m = map(N);
-
     size_t count = 0;
 
     for(int n=0; n<=N; n++)
@@ -130,17 +126,4 @@ void solve()
     }
 
     cout << "solution: " << count << endl;
-}
-
-int main()
-{
-    auto t0 = chrono::high_resolution_clock::now();
-
-    solve();
-
-    auto t1 = chrono::high_resolution_clock::now();
-
-    cout << "Solving the problem took " << chrono::duration_cast<chrono::milliseconds>(t1 - t0) << " milliseconds." << endl;
-
-    return 0;
 }
