@@ -3,23 +3,56 @@
 
 #include <iostream>
 #include <vector>   // transport() needs this
+#include <list>
 #include <cmath>	// round()
-#include <stdexcept>
 
 using namespace std;
 
-const int cardLimit = 3;	// this many cards may be held at once
-const int doors = 8;		// rooms+1
-const int reach = ceil((double) cardLimit / 2) - 1;	// we can carry one card this far and go back to where we came from
-int load = reach % 2 == 0 ? 2 : 1;					// if reach is a even number, we can carry two cards at once, else one
-
-vector<int> B(doors, 0);	// represents the actual value of cards in the boxes (B for box)
-vector<int> N(doors, 0);	// represents the debit value of cards in the boxes (N for neccessary)
-
-// find out how many cards must be at least
-void setN();
-
-int main()
+int solve(int C, int N, int K = 0)
 {
+    if(N == 0)
+        return 0;
+    
+    int lastStep;
 
+    if(K <= C-2)
+        lastStep = 1;
+
+    lastStep = 2 * (K/(C-2));
+
+    if(K % (C-2) != 0)
+        lastStep++;
+    
+    return lastStep + solve(C, N-1, lastStep);
+}
+
+/**
+ * compile:
+ * clang++ -Wall -pedantic -ferror-limit=1 -std=c++2b -o Problem327/problem327 'Problem327/Problem327.cpp'
+ */
+int main(int argc, char *argv[])
+{
+    if(argc != 3)
+    {
+        cout << "invoke like so: ./problem327 <maximum number of cards> <number of rooms>" << endl;
+        return 0;
+    }
+
+    int C = stoi(argv[2]);
+    int N = stoi(argv[1]);
+
+    if(N <= 0 || C <= 0)
+    {
+        cout << "invalid arguments: " << C << ", " << N << " must both be greater or equal to 0." << endl;
+        return 0;
+    }
+
+    int solution = solve(C, N);
+
+    if(solution < 0)
+        cout << "No solution was found." << endl;
+    else
+        cout << "M = " << solution << endl;
+    
+    return 0;
 }
