@@ -10,21 +10,21 @@ typedef std::pair<char, char> card;
 
 void sort(vector<card> &cards);
 
-int straightFlush(const vector<card> &cards);
+int isStraightFlush(const vector<card> &cards);
 
-int fourOfAKind(const vector<card> &cards);
+int isFourOfAKind(const vector<card> &cards);
 
-int fullHouse(const vector<card> &cards);
+int isFullHouse(const vector<card> &cards);
 
-int flush(const vector<card> &cards);
+int isFlush(const vector<card> &cards);
 
-int straight(const vector<card> &cards);
+int isStraight(const vector<card> &cards);
 
-int threeOfAKind(const vector<card> &cards);
+int isThreeOfAKind(const vector<card> &cards);
 
-int twoPairs(const vector<card> &cards);
+int isTwoPairs(const vector<card> &cards);
 
-int pair(const vector<card> &cards);
+int isPair(const vector<card> &cards);
 
 int getHighestRank(const vector<card> &cards);
 

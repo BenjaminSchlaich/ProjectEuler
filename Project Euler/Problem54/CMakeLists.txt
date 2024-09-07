@@ -23,7 +23,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(Problem54 problem54.cpp poker.cpp)
 
 # Add the tests executable
-add_executable(test_suite test_example.cpp)
+add_executable(test_suite test_poker.cpp poker.cpp)
 
 # Link the test executable with Google Test
 target_link_libraries(test_suite gtest gtest_main)

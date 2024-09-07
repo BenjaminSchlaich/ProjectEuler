@@ -70,5 +70,6 @@
         "strstream": "cpp",
         "typeindex": "cpp"
     },
-    "cmake.sourceDirectory": "/Users/benjaminschlaich/Coding/ProjectEuler/Project Euler/Problem54"
+    "cmake.sourceDirectory": "/Users/benjaminschlaich/Coding/ProjectEuler/Project Euler/Problem54",
+    "cmake.buildDirectory": "${workspaceFolder}/Project Euler/Problem54/build"
 }
