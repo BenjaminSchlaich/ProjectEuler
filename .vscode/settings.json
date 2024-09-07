@@ -69,5 +69,6 @@
         "set": "cpp",
         "strstream": "cpp",
         "typeindex": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/benjaminschlaich/Coding/ProjectEuler/Project Euler/Problem54"
 }
