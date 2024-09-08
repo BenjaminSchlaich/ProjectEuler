@@ -1,10 +1,16 @@
 
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
 // Farbe, Wert
 typedef std::pair<char, char> card;
+
+// pretty-print a card
+ostream &operator<<(ostream &os, card c);
+
+bool operator==(const card c, const card d);
 
 #define MAX(a, b) (a > b ? a : b)
 
@@ -26,8 +32,10 @@ int isTwoPairs(const vector<card> &cards);
 
 int isPair(const vector<card> &cards);
 
-int getHighestRank(const vector<card> &cards);
+int getHighestRank(vector<card> &cards);
 
 bool p1HasHighCard(vector<card> &p1, vector<card> &p2);
 
 bool p1Higher(vector<card> &p1, vector<card> &p2);
+
+vector<vector<card>> readFile(string filename);

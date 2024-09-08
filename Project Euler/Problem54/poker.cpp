@@ -6,10 +6,9 @@
 #include <algorithm>
 #include <functional>
 
-using namespace std;
+#include <fstream>
 
-// Farbe, Wert
-typedef std::pair<char, char> card;
+using namespace std;
 
 struct pair_hash
 {
@@ -19,7 +18,75 @@ struct pair_hash
     }
 };
 
+ostream &operator<<(ostream &os, card c)
+{
+    string s = "[";
+
+    switch(c.first)
+    {
+        case 1:
+            s += "Kreuz";
+            break;
+        case 2:
+            s += "Pik";
+            break;
+        case 3:
+            s += "Herz";
+            break;
+        case 4:
+            s += "Karo";
+            break;
+        default:
+            s += "error: " + to_string(c.first);
+    }
+
+    s += " ";
+
+    if(c.second < 2)
+        s += "error: " + to_string(c.second);
+    else if(c.second <= 10)
+        s += to_string((int) c.second);
+    else
+    {
+        switch(c.second)
+        {
+            case 11:
+                s += "Bube";
+                break;
+            case 12:
+                s += "Dame";
+                break;
+            case 13:
+                s += "König";
+                break;
+            case 14:
+                s += "Ass";
+                break;
+            default:
+                s += "error: "  + to_string(c.second);
+        }
+    }
+
+    s += "]";
+
+    os << s;
+
+    return os;
+}
+
+bool operator==(const card c, const card d)
+{
+    return (c.first == d.first) && (c.second == d.second);
+}
+
 #define MAX(a, b) (a > b ? a : b)
+
+#define CONTAINS(c) & (1 << c)
+#define INSERT(c, s) s |= (1 << c);
+
+static const vector<int(*)(const vector<card> &)> order = {
+        isPair, isTwoPairs, isThreeOfAKind, isStraight, isFlush, isFullHouse, isFourOfAKind, isStraightFlush
+    };
 
 void sort(vector<card> &cards)
 {
@@ -30,6 +97,7 @@ void sort(vector<card> &cards)
     std::sort(cards.begin(), cards.end(), cmp);
 }
 
+// expects sorted cards
 int isStraightFlush(const vector<card> &cards)
 {
     for(int i=1; i<5; i++)
@@ -39,6 +107,7 @@ int isStraightFlush(const vector<card> &cards)
     return cards.at(4).second;
 }
 
+// expects sorted cards
 int isFourOfAKind(const vector<card> &cards)
 {
     if(cards.at(0).second == cards.at(3).second)
@@ -49,30 +118,20 @@ int isFourOfAKind(const vector<card> &cards)
         return 0;
 }
 
+// expects sorted cards
 int isFullHouse(const vector<card> &cards)
 {
-    unordered_map<const card, char, pair_hash> m;
-
-    for(const card &c: cards)
-        if(m.contains(c))
-            m.at(c)++;
-        else
-            m.insert({c, 1});
-
-    if(m.size() != 2)
+    bool valid = cards.at(0) == cards.at(1)
+                &&  cards.at(3) == cards.at(4)
+                && (cards.at(1) == cards.at(2) || cards.at(2) == cards.at(3));
+    
+    if(!valid)
         return 0;
-    
-    int max = 0;
-    
-    for(auto &p: m)
-        if(p.second != 3 && p.second != 2)
-            return 0;
-        else
-            max = MAX(max, p.first.second);
-    
-    return max;
+    else
+        return cards.at(4).second;
 }
 
+// expects sorted cards
 int isFlush(const vector<card> &cards)
 {
     for(int i=1; i<5; i++)
@@ -82,6 +141,7 @@ int isFlush(const vector<card> &cards)
     return cards.at(4).second;
 }
 
+// expects sorted cards
 int isStraight(const vector<card> &cards)
 {
     for(int i=1; i<5; i++)
@@ -93,75 +153,83 @@ int isStraight(const vector<card> &cards)
 
 int isThreeOfAKind(const vector<card> &cards)
 {
-    unordered_map<const card, char, pair_hash> m;
+    vector<char> m(16, 0);
 
     for(const card &c: cards)
-        if(m.contains(c))
-            m.at(c)++;
-        else
-            m.insert({c, 1});
+    {
+        m.at(c.second)++;
 
-    for(auto &p: m)
-        if(p.second == 3)
-            return p.first.second;
+        if(m.at(c.second) == 3)
+            return c.second;
+    }
     
     return 0;
 }
 
 int isTwoPairs(const vector<card> &cards)
 {
-    unordered_map<const card, char, pair_hash> m;
+    int s1 = 0, s2 = 0;
 
     for(const card &c: cards)
-        if(m.contains(c))
-            m.at(c)++;
+        if(s1 CONTAINS(c.second))
+            INSERT(c.second, s2)
         else
-            m.insert({c, 1});
+            INSERT(c.second, s1)
     
-    int set = 0;
+    int sting = 0b100;  // 1 << 2
+    int count = 0;
+    int max = 0;
 
-    for(auto &p: m)
-        if(p.second == 2)
+    for(int i=0; i<13; i++)
+    {
+        if(sting & s1 & s2)
         {
-            if(set)
-                return MAX(set, p.first.second);
-            else
-                set = p.first.second;
+            count++;
+            max = MAX(max, i+2);
         }
+
+        sting <<= 1;
+    }
     
-    return 0;
+    if(count >= 2)
+        return max;
+    else
+        return 0;
 }
 
+// this method will not find the higher of two pairs, but choose one arbitrarily.
+// that should not matter, as two pairs would be worth more anyways, so this shouldn't be called then.
 int isPair(const vector<card> &cards)
 {
-    unordered_set<card, pair_hash> s;
+    int s = 0;
 
     for(auto &c: cards)
-        if(s.contains(c))
+        if(s CONTAINS(c.second))
             return c.second;
         else
-            s.insert(c);
+            INSERT(c.second, s);
     
     return 0;
 }
 
-int getHighestRank(const vector<card> &cards)
+// will return the rank of the highest figure possible with this hand.
+// 0 = high card, 1 = pair, 2 = two pairs, ...
+int getHighestRank(vector<card> &cards)
 {
-    auto fs = {
-        &isStraightFlush, &isFourOfAKind, &isFullHouse, &isFlush, &isStraight, &isThreeOfAKind, &isTwoPairs, &isPair
-    };
+    int rank = order.size();
 
-    int rank = fs.size();
+    sort(cards);
 
-    for(auto &f: fs)
-        if(f(cards))
-            return rank;
+    for(auto f = order.rbegin(); f != order.rend(); f++)
+        if((*f)(cards))
+            break;
         else
             rank--;
 
-    return 0;
+    return rank;
 }
 
+// expects sorted cards
 bool p1HasHighCard(vector<card> &p1, vector<card> &p2)
 {
     for(int i=4; i>=0; i--)
@@ -173,6 +241,7 @@ bool p1HasHighCard(vector<card> &p1, vector<card> &p2)
     return false;
 }
 
+// expects two vectors with exactly 5 cards each.
 bool p1Higher(vector<card> &p1, vector<card> &p2)
 {
     sort(p1);
@@ -184,7 +253,85 @@ bool p1Higher(vector<card> &p1, vector<card> &p2)
     if(r1 > r2)
         return true;
     else if(r1 == r2)
+    {
+        if(r1 > 0)
+        {
+            int innerHigh1 = order.at(r1-1)(p1);
+            int innerHigh2 = order.at(r2-1)(p2);
+
+            if(innerHigh1 > innerHigh2)
+                return true;
+            else if(innerHigh1 < innerHigh2)
+                return false;
+        }
+
         return p1HasHighCard(p1, p2);
+    }
     else
         return false;
+}
+
+vector<vector<card>> readFile(string filename)
+{
+    ifstream ifs(filename);
+
+    if(!ifs.good())
+    {
+        cout << "Could not open file " << filename << endl;
+        return vector<vector<card>>();
+    }
+
+    vector<vector<card>> vs;
+
+    while(!ifs.eof())
+    {
+        string line;
+
+        getline(ifs, line);
+
+        for(int i=0; i<2; i++)
+        {
+            vector<card> v;
+
+            for(int j=0; j<5; j++)
+            {
+                int base = 15*i + 3*j;
+                char value = line.at(base);
+                char color = line.at(base + 1);
+
+                switch(value)
+                {
+                    case 'T': value = 10;
+                        break;
+                    case 'J': value = 11;
+                        break;
+                    case 'Q': value = 12;
+                        break;
+                    case 'K': value = 13;
+                        break;
+                    case 'A': value = 14;
+                        break;
+                    default:
+                        value -= '0';
+                }
+
+                switch(color)
+                {
+                    case 'C': color = 1;
+                        break;
+                    case 'S': color = 2;
+                        break;
+                    case 'H': color = 3;
+                        break;
+                    case 'D': color = 4;
+                }
+
+                v.push_back({color, value});
+            }
+
+            vs.push_back(v);
+        }
+    }
+
+    return vs;
 }
