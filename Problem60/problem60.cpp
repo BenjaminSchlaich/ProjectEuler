@@ -11,7 +11,7 @@ using namespace std;
 
 static const int limit = 100000000;
 
-inline int max(int a, int b)
+inline int MAX(int a, int b)
 {
     return a > b ? a : b;
 }
@@ -71,7 +71,7 @@ void solve(int N)
                 ss.push_back(*itP);     // add the new prime to the set
                 ss.front() += *itP;     // update the sum, too
 
-                maxSetSize = max(maxSetSize, ss.size());
+                maxSetSize = MAX(maxSetSize, ss.size());
 
                 if(ss.size() == N+1)
                     minSetSum = min(minSetSum, ss.front());

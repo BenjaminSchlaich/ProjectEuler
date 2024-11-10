@@ -8,7 +8,7 @@
             "name": "(lldb) Starten",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Problem186/problem186",
+            "program": "${workspaceFolder}/Problem327/problem327",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
