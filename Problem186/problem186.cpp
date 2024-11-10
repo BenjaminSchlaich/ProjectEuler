@@ -134,7 +134,7 @@ int solve()
      * that contains P.M., also contains >=99% of all nodes."
      */
 
-    int friendCount = 1;
+    int friendCount = 0;
 
     int n = 0;
 
@@ -151,10 +151,11 @@ int solve()
         g[n1].push_back(n2);
         g[n2].push_back(n1);
 
-        if(isFriend[n1])
-            friendCount += closeFriends(n2);
-        else if(isFriend[n2])
+        if(isFriend[n1]  || isFriend[n2])
+        {
             friendCount += closeFriends(n1);
+            friendCount += closeFriends(n2);
+        }
     }
 
     return n/2;
