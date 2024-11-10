@@ -21,11 +21,12 @@ int main()
 {
     for(int n=1; n<=9; n++)
     {
-        for(int r=1; r<= (n <= 4 ? 2 : 1); r++)
+        for(int r=1; r<= 2; r++)
             cout << solve(3, r, n) << " ";
         
         cout << endl;
     }
 
     cout << "M(3, 6) = " << solve(3, 6) << endl;
+    cout << "M(4, 6) = " << solve(4, 6) << endl;
 }
