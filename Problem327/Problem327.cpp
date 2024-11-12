@@ -2,22 +2,25 @@
 //
 
 #include "solve.hpp"
+#include "test327.hpp"
 
 #include <iostream>
 
 using namespace std;
 
 /**
+ * /Users/benjaminschlaich/Coding/ProjectEuler/test.cpp
+ * 
  * build:
  * flg="-std=c++2b -Wall -Werror -ferror-limit=1 -o problem327"
- * src="solve.cpp problem327.cpp"
+ * src="solve.cpp problem327.cpp test327.cpp"
  * build="clang++ $flg $src"
  * eval $build
  * 
  * run:
  * ./problem327
  */
-int main()
+int pmain()
 {
     for(int n=1; n<=9; n++)
     {
@@ -29,4 +32,13 @@ int main()
 
     cout << "M(3, 6) = " << solve(3, 6) << endl;
     cout << "M(4, 6) = " << solve(4, 6) << endl;
+
+    return 0;
+}
+
+int main()
+{
+    test_all();
+
+    return 0;
 }

@@ -27,8 +27,26 @@ inline constexpr int MAX(const int a, const int b)
  */
 int carryOne(int C, int K)
 {
-    int r = MIN(K + 1, C) + MAX(0, K - (C-1)) * 3;
-    return r;
+    if(C <= 2 && K >= 1)
+        throw logic_error("carryOne called with impossible arguments: C=" + to_string(C) + " K=" + to_string(K));
+
+    if(K >= C)  // we have to go back
+    {
+        const int nForthBack = (K - (C - 1)) / (C - 2);
+        
+        int cost = nForthBack * C;              // cost of going back and forth
+
+        cost += (K - nForthBack * (C - 2)) + 1; // cost of the last run forth
+
+        return cost;
+    }
+    else        // can be done in one go!
+    {
+        return K + 1;
+    }
+
+    // int r = MIN(K + 1, C) + MAX(0, K - (C-1)) * 3;
+    // return r;
 }
 
 int solve(int C, int R, int K)
