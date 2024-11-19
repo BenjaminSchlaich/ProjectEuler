@@ -34,6 +34,10 @@ int main()
     
     cout << sum << endl;
 
+    cout << endl << "C=3, R=30:" << endl;
+
+    cout << solve(3, 30) << endl;
+
     cout << endl << "Solution of the problem (3 <= C <= 40, R = 30):" << endl;
 
     sum = 0;

@@ -29,16 +29,6 @@ int carryOne(int C, int K)
 {
     if(C <= 2 && K >= 1)
         throw logic_error("carryOne called with impossible arguments: C=" + to_string(C) + " K=" + to_string(K));
-    else if(K < C)
-        return K + 1;
-    else
-        return K / (C - 2) * C + (K % (C - 2)) + 1;
-}
-
-int solve(int C, int R, int K)
-{
-    if(R == 1)
-        return carryOne(C, K);
     
     int res = 0;
 
@@ -54,4 +44,12 @@ int solve(int C, int R, int K)
     }
 
     return res;
+}
+
+int solve(int C, int R, int K)
+{
+    if(R == 1)
+        return carryOne(C, K);
+    else
+        return solve(C, R - 1, carryOne(C, K));
 }
