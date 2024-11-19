@@ -15,13 +15,6 @@ inline constexpr unsigned long MAX(const unsigned long a, const unsigned long b)
     return a > b ? a : b;
 }
 
-// static vector<vector<unsigned long>> dp;
-
-/**
- * // dp[r][c] = #cards necessary to carry c cards through r doors
-    dp = vector<vector<unsigned long>>(R + 1, vector<unsigned long>());
- */
-
 /**
  * how many cards are needed to carry c cards through 1 door?
  */
