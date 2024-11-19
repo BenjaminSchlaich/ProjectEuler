@@ -50,15 +50,6 @@ int solve(int C, int R, int K)
 {
     if(R == 1)
         return carryOne(C, K);
-    
-    int min = numeric_limits<int>::max();
-
-    for(int r=1; r<R; r++)
-    {
-        int back = solve(C, R - r, K);
-        int whole = solve(C, r, back);
-        min = MIN(min, whole);
-    }
-
-    return min; // solve(C, R-1, carryOne(C, K));
+    else
+        return solve(C, R-1, carryOne(C, K));
 }
