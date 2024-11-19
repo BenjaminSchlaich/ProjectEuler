@@ -5,12 +5,12 @@
 
 struct input
 {
-    int C, R, K;
+    unsigned long C, R, K;
 };
 
 struct output
 {
-    int value;
+    unsigned long value;
 
     inline std::string to_string()
     {

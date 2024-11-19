@@ -13,7 +13,7 @@ vector<test_case<input, output>> test_C3_R1()
 {
     auto v = vector<test_case<input, output>>();
 
-    auto test = [](int K, int expected){return (test_case<input, output>) {
+    auto test = [](unsigned long K, unsigned long expected){return (test_case<input, output>) {
         "test for K=" + to_string(K),
         {3, 1, K},
         eval,
@@ -38,7 +38,7 @@ vector<test_case<input, output>> test_C5_R1()
 {
     auto v = vector<test_case<input, output>>();
 
-    auto test = [](int K, int expected){return (test_case<input, output>) {
+    auto test = [](unsigned long K, unsigned long expected){return (test_case<input, output>) {
         "test for K=" + to_string(K),
         {5, 1, K},
         eval,

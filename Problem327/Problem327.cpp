@@ -27,13 +27,13 @@ int main()
 
     cout << "Result of the small sum (3 <= C <= 10, R = 6):" << endl;
     
-    int sum = 0;
+    unsigned long sum = 0;
 
-    for(int C=3; C<=10; C++)
+    for(unsigned long C=3; C<=10; C++)
         sum += solve(C, 10);
     
     cout << sum << endl;
-
+    
     cout << endl << "C=3, R=30:" << endl;
 
     cout << solve(3, 30) << endl;
@@ -42,10 +42,10 @@ int main()
 
     sum = 0;
 
-    for(int C=3; C<=40; C++)
+    for(unsigned long C=3; C<=40; C++)
         sum += solve(C, 30);
     
     cout << sum << endl;
-
+    
     return 0;
 }

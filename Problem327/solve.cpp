@@ -5,48 +5,46 @@
 
 using namespace std;
 
-inline constexpr int MIN(const int a, const int b)
+inline constexpr unsigned long MIN(const unsigned long a, const unsigned long b)
 {
     return a < b ? a : b;
 }
 
-inline constexpr int MAX(const int a, const int b)
+inline constexpr unsigned long MAX(const unsigned long a, const unsigned long b)
 {
     return a > b ? a : b;
 }
 
-// static vector<vector<int>> dp;
+// static vector<vector<unsigned long>> dp;
 
 /**
  * // dp[r][c] = #cards necessary to carry c cards through r doors
-    dp = vector<vector<int>>(R + 1, vector<int>());
+    dp = vector<vector<unsigned long>>(R + 1, vector<unsigned long>());
  */
 
 /**
  * how many cards are needed to carry c cards through 1 door?
  */
-int carryOne(int C, int K)
+unsigned long carryOne(unsigned long C, unsigned long K)
 {
     if(C <= 2 && K >= 1)
         throw logic_error("carryOne called with impossible arguments: C=" + to_string(C) + " K=" + to_string(K));
     
-    int res = 0;
+    if(K < C)
+        return K + 1;
+    
+    unsigned long ceilw = (K - C + 1) % (C - 2);
+    unsigned long walks = (K - C + 1) / (C - 2);
 
-    while(K > 0)
-    {
-        if(K < C)
-            return res + K + 1;
-        else
-        {
-            K -= C - 2;
-            res += C;
-        }
-    }
+    if(ceilw)
+        walks++;
 
-    return res;
+    unsigned long spill = K - walks * (C - 2);
+    
+    return walks * C + spill + 1;
 }
 
-int solve(int C, int R, int K)
+unsigned long solve(unsigned long C, unsigned long R, unsigned long K)
 {
     if(R == 1)
         return carryOne(C, K);
