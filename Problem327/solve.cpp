@@ -39,6 +39,19 @@ int solve(int C, int R, int K)
 {
     if(R == 1)
         return carryOne(C, K);
-    else
-        return solve(C, R - 1, carryOne(C, K));
+    
+    int res = 0;
+
+    while(K > 0)
+    {
+        if(K < C)
+            return res + K + 1;
+        else
+        {
+            K -= C - 2;
+            res += C;
+        }
+    }
+
+    return res;
 }
