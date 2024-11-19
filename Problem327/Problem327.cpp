@@ -20,25 +20,28 @@ using namespace std;
  * run:
  * ./problem327
  */
-int pmain()
-{
-    for(int n=1; n<=9; n++)
-    {
-        for(int r=1; r<= 2; r++)
-            cout << solve(3, r, n) << " ";
-        
-        cout << endl;
-    }
-
-    cout << "M(3, 6) = " << solve(3, 6) << endl;
-    cout << "M(4, 6) = " << solve(4, 6) << endl;
-
-    return 0;
-}
 
 int main()
 {
     test_all();
+
+    cout << "Result of the small sum (3 <= C <= 10, R = 6):" << endl;
+    
+    int sum = 0;
+
+    for(int C=3; C<=10; C++)
+        sum += solve(C, 10);
+    
+    cout << sum << endl;
+
+    cout << endl << "Solution of the problem (3 <= C <= 40, R = 30):" << endl;
+
+    sum = 0;
+
+    for(int C=3; C<=40; C++)
+        sum += solve(C, 30);
+    
+    cout << sum << endl;
 
     return 0;
 }

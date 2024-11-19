@@ -13,7 +13,7 @@ void run_tests(std::vector<test_case<IN, OUT>> &ts, std::string suit_name)
 {
     cout << endl << endl;
     PRINT_STARS PRINT_LINE
-    cout << "\t Running test suite >" << suit_name << "< ..." << endl;
+    cout << "\t Running test suite ### " << suit_name << " ### ..." << endl;
     PRINT_LINE
 
     int success = 0;
@@ -38,8 +38,8 @@ void run_tests(std::vector<test_case<IN, OUT>> &ts, std::string suit_name)
             {
                 failure++;
 
-                cout    << "failure in test " << test_name
-                        << ": expected " << ts[t].expected.to_string()
+                cout    << "failure in test \"" << test_name
+                        << "\": expected " << ts[t].expected.to_string()
                         << ", but got " << o.to_string() << endl;
             }
         }
@@ -47,7 +47,7 @@ void run_tests(std::vector<test_case<IN, OUT>> &ts, std::string suit_name)
         {
             error++;
 
-            cout << "error in test " << test_name << ": " << e.what() << endl;
+            cout << "error in test \"" << test_name << "\": " << e.what() << endl;
         }
     }
 

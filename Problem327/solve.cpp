@@ -30,23 +30,20 @@ int carryOne(int C, int K)
     if(C <= 2 && K >= 1)
         throw logic_error("carryOne called with impossible arguments: C=" + to_string(C) + " K=" + to_string(K));
 
-    if(K >= C)  // we have to go back
-    {
-        const int nForthBack = (K - (C - 1)) / (C - 2);
-        
-        int cost = nForthBack * C;              // cost of going back and forth
+    int res = 0;
 
-        cost += (K - nForthBack * (C - 2)) + 1; // cost of the last run forth
-
-        return cost;
-    }
-    else        // can be done in one go!
+    while(K > 0)
     {
-        return K + 1;
+        if(K < C)
+            return res + K + 1;
+        else
+        {
+            K -= C - 2;
+            res += C;
+        }
     }
 
-    // int r = MIN(K + 1, C) + MAX(0, K - (C-1)) * 3;
-    // return r;
+    return res;
 }
 
 int solve(int C, int R, int K)
