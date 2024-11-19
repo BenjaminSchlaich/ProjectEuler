@@ -29,21 +29,10 @@ int carryOne(int C, int K)
 {
     if(C <= 2 && K >= 1)
         throw logic_error("carryOne called with impossible arguments: C=" + to_string(C) + " K=" + to_string(K));
-
-    int res = 0;
-
-    while(K > 0)
-    {
-        if(K < C)
-            return res + K + 1;
-        else
-        {
-            K -= C - 2;
-            res += C;
-        }
-    }
-
-    return res;
+    else if(K < C)
+        return K + 1;
+    else
+        return (K-C)/(C-2) * C + K + 1;
 }
 
 int solve(int C, int R, int K)
