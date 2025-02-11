@@ -1,16 +1,16 @@
 
 #pragma once
 
-#include "../test.cpp"
+#include "../test.hpp"
 
 #include <string>
 
-struct input
+struct build_input
 {
     int value;
 };
 
-struct output
+struct build_output
 {
     std::string s;
 
@@ -19,7 +19,7 @@ struct output
         return s;
     }
 
-    inline bool compare(const output &o)
+    inline bool compare(const build_output &o)
     {
         return s == o.s;
     }

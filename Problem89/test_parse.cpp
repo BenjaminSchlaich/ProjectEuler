@@ -7,12 +7,12 @@
 
 using namespace std;
 
-static function<output(input&)> eval = [](input &in) {return (output) {parse(in.s)};};
+static function<parse_output(parse_input&)> eval = [](parse_input &in) {return (parse_output) {parse(in.s)};};
 
 /**
  * all of these come from the problem description and the there linked roman number explanation examples.
  */
-vector<test_case<input, output>> basic_tests()
+vector<test_case<parse_input, parse_output>> basic_parse_tests()
 {
     vector<string> ins = {
         "IIIIIIIIIIIIIIII",
@@ -37,7 +37,7 @@ vector<test_case<input, output>> basic_tests()
         1606, 1606
     };
 
-    vector<test_case<input, output>> ts;
+    vector<test_case<parse_input, parse_output>> ts;
 
     for(size_t i=0; i<ins.size(); i++)
         ts.push_back({
@@ -52,6 +52,6 @@ vector<test_case<input, output>> basic_tests()
 
 void test_parse()
 {
-    auto t = basic_tests();
+    auto t = basic_parse_tests();
     run_tests(t, "basic parsing tests");
 }

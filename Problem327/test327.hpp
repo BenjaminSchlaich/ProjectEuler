@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../test.cpp"
+#include "../test.hpp"
 
 struct input
 {

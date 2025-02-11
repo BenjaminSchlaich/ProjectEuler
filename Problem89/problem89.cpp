@@ -3,8 +3,13 @@
 #include "test_parse.hpp"
 #include "test_build.hpp"
 
+#include <fstream>
+
 using namespace std;
 
+/**
+ * Convert one single roman character digit to an integer.
+ */
 int translateChar(char c)
 {
     switch(c)
@@ -21,7 +26,10 @@ int translateChar(char c)
     }
 }
 
-int parse(string s)
+/**
+ * Parse the roman string representation of a number to an integer.
+ */
+int parse(string &s)
 {
     int res;
     int lastCV;
@@ -51,6 +59,9 @@ int parse(string s)
     return res;
 }
 
+/**
+ * Build the shortest roman string representation of an integer.
+ */
 string build_shortest(int i)
 {
     string s = "";
@@ -130,9 +141,57 @@ string build_shortest(int i)
     return s;
 }
 
+vector<string> load()
+{
+    ifstream ifs("0089_roman.txt");
+
+    if(!ifs.good())
+        throw runtime_error("load(): could not open file 0089_roman.txt");
+
+    vector<string> v;
+    
+    while(!ifs.eof())
+    {
+        string s;
+
+        getline(ifs, s);
+
+        v.push_back(s);
+    }
+
+    return v;
+}
+
+/**
+ * 1. Load the list of numbers
+ * 2. Iterate over the numbers and count the length of the original and shortes representation
+ * 3. Return the total difference
+ */
+int solve()
+{
+    auto v = load();
+
+    int countOriginal = 0;
+    int countCompress = 0;
+
+    // count the original number of letters, as well as the reduced number of letters:
+    for(string &s: v)
+    {
+        countOriginal += s.length();
+
+        // general approach to finding the shortest string: parse the number represented, and build the shortest string of that.
+        string compressed(build_shortest(parse(s)));
+
+        countCompress += compressed.length();
+    }
+
+    // the result is the difference between the total lengths:
+    return countOriginal - countCompress;
+}
+
 /**
  * build:
- * clang++ -std=c++20 -o problem89 -ferror-limit=1 problem89.cpp test_parse.cpp test_build.cpp
+ * clang++ -std=c++20 -Wall -Werror -o problem89 -ferror-limit=1 problem89.cpp test_parse.cpp test_build.cpp
  * 
  * run:
  * ./problem89
@@ -142,4 +201,6 @@ int main()
     test_parse();
 
     test_build();
+
+    cout << endl << "Solution: " << solve() << endl;
 }

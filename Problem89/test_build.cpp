@@ -5,12 +5,12 @@
 
 using namespace std;
 
-static function<output(input&)> eval = [](input &in) {return (output) {build_shortest(in.value)};};
+static function<build_output(build_input&)> eval = [](build_input &in) {return (build_output) {build_shortest(in.value)};};
 
 /**
  * all of these come from the problem description and the there linked roman number explanation examples.
  */
-vector<test_case<input, output>> basic_tests()
+vector<test_case<build_input, build_output>> basic_build_tests()
 {
     vector<string> outs = {
         "XVI",
@@ -24,11 +24,11 @@ vector<test_case<input, output>> basic_tests()
         1606
     };
 
-    vector<test_case<input, output>> ts;
+    vector<test_case<build_input, build_output>> ts;
 
     for(size_t i=0; i<ins.size(); i++)
         ts.push_back({
-            "build number " + ins[i],
+            "build number " + to_string(ins[i]),
             {ins[i]},
             eval,
             {outs[i]}
@@ -39,6 +39,6 @@ vector<test_case<input, output>> basic_tests()
 
 void test_build()
 {
-    auto t = basic_tests();
+    auto t = basic_build_tests();
     run_tests(t, "basic number building tests");
 }

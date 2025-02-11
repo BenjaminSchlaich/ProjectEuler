@@ -1,16 +1,16 @@
 
 #pragma once
 
-#include "../test.cpp"
+#include "../test.hpp"
 
 #include <string>
 
-struct input
+struct parse_input
 {
     std::string s;
 };
 
-struct output
+struct parse_output
 {
     int value;
 
@@ -19,7 +19,7 @@ struct output
         return std::to_string(value);
     }
 
-    inline bool compare(const output &o)
+    inline bool compare(const parse_output &o)
     {
         return value == o.value;
     }
