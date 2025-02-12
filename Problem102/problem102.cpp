@@ -4,14 +4,9 @@
 #include <sstream>
 #include <vector>
 
-#include "../vec.hpp"
+#include "triangle.hpp"
 
 using namespace std;
-
-struct Triangle
-{
-    int ax, ay, bx, by, cx, cy;
-};
 
 Triangle parseString(const std::string& input)
 {
@@ -32,7 +27,10 @@ Triangle parseString(const std::string& input)
 
 vector<Triangle> readFile()
 {
-    ifstream ifs("0102_triangles.txt");
+    ifstream ifs("Problem102/0102_triangles.txt");
+
+    if(!ifs.good())
+        throw std::runtime_error("could not open input file!");
 
     vector<Triangle> ss;
 
@@ -44,19 +42,6 @@ vector<Triangle> readFile()
     }
 
     return ss;
-}
-
-bool contains(Triangle &t, int x, int y)
-{
-    vec p = {(double) x, (double) y};
-
-    vec a = {(double) t.ax, (double) t.ay};
-    vec b = {(double) t.bx, (double) t.bx};
-    vec c = {(double) t.cx, (double) t.cy};
-
-    return sameSide(a, b, c, p)
-        && sameSide(b, c, a, p)
-        && sameSide(a, c, b, p);
 }
 
 /**
@@ -74,4 +59,12 @@ int main()
     bool xyz = contains(ts.at(1), 0, 0);
 
     cout << "abc contains 0 : " << abc << endl << "xyz contains 0 : " << xyz << endl;
+
+    int count = 0;
+
+    for(Triangle &t: ts)
+        if(contains(t, 0, 0))
+            count++;
+
+    cout << "count = " << count << endl;
 }
