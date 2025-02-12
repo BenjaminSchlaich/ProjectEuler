@@ -74,6 +74,8 @@
         "system_error": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "*.inc": "cpp",
+        "ranges": "cpp"
     }
 }

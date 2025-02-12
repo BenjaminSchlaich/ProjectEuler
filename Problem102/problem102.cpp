@@ -4,6 +4,8 @@
 #include <sstream>
 #include <vector>
 
+#include "../vec.hpp"
+
 using namespace std;
 
 struct Triangle
@@ -44,31 +46,32 @@ vector<Triangle> readFile()
     return ss;
 }
 
-/*
-    AB (von a zu b): a + AB - b = 0 <=> AB = b - a
-
-    Projektion P von p=(px,py) auf v=(vx, vy): P = ß*v ; (P - p)*v = 0 <=> ß*v*v = p*v <=> ß = (p*v)/v*v
-        => P = v * (p*v)/v*v
-    
-*/
-bool contains(Triangle &t)
+bool contains(Triangle &t, int x, int y)
 {
-    if(t.ax != t.bx)
-    {
-        double m = (t.ay - t.by)/(t.ax - t.bx);
-        double y0 = t.ay - t.ax*m;
-    }
+    vec p = {(double) x, (double) y};
 
-    
-    return true;
+    vec a = {(double) t.ax, (double) t.ay};
+    vec b = {(double) t.bx, (double) t.bx};
+    vec c = {(double) t.cx, (double) t.cy};
+
+    return sameSide(a, b, c, p)
+        && sameSide(b, c, a, p)
+        && sameSide(a, c, b, p);
 }
 
+/**
+ * compile: call from ProjectEuler directory:
+ * clang++ -o Problem102/problem102 -std=c++2b vec.cpp Problem102/problem102.cpp
+ * 
+ * call: call from ProjectEuler directory:
+ * ./Problem102/problem102
+ */
 int main()
 {
     auto ts = readFile();
 
-    bool abc = contains(ts.at(0));
-    bool xyz = contains(ts.at(1));
+    bool abc = contains(ts.at(0), 0, 0);
+    bool xyz = contains(ts.at(1), 0, 0);
 
     cout << "abc contains 0 : " << abc << endl << "xyz contains 0 : " << xyz << endl;
 }
