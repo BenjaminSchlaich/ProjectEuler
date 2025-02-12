@@ -51,37 +51,14 @@ vector<Triangle> readFile()
         => P = v * (p*v)/v*v
     
 */
-bool contains(Triangle &t, int x, int y)
+bool contains(Triangle &t)
 {
-    // (x,y) on one side with C from AB:
-    int abx = t.bx - t.ax;
-    int aby = t.by - t.ay;
+    if(t.ax != t.bx)
+    {
+        double m = (t.ay - t.by)/(t.ax - t.bx);
+        double y0 = t.ay - t.ax*m;
+    }
 
-    int cSide = abx*t.cx + aby*t.cy <= 0 ? -1 : 1;
-    int pSide = abx*x + aby*y <= 0 ? -1 : 1;
-
-    if(cSide != pSide)
-        return false;
-
-    // (x,y) on one side with B from AC:
-    int acx = t.cx - t.ax;
-    int acy = t.cy - t.ay;
-
-    int bSide = acx*t.bx + acy*t.by <= 0 ? -1 : 1;
-    pSide = acx*x + acy*y <= 0 ? -1 : 1;
-
-    if(bSide != pSide)
-        return false;
-    
-    // (x,y) on one side with A from BC:
-    int bcx = t.cx - t.bx;
-    int bcy = t.cy - t.by;
-
-    int aSide = bcx*t.ax + bcy*t.ay <= 0 ? -1 : 1;
-    pSide = bcx*x + bcy*y <= 0 ? -1 : 1;
-
-    if(aSide != pSide)
-        return false;
     
     return true;
 }
@@ -90,8 +67,8 @@ int main()
 {
     auto ts = readFile();
 
-    bool abc = contains(ts.at(0), 0, 0);
-    bool xyz = contains(ts.at(1), 0, 0);
+    bool abc = contains(ts.at(0));
+    bool xyz = contains(ts.at(1));
 
     cout << "abc contains 0 : " << abc << endl << "xyz contains 0 : " << xyz << endl;
 }
