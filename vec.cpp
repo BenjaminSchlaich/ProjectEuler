@@ -7,12 +7,12 @@ vec::vec(double x, double y)
     this->y = y;
 }
 
-double vec::X()
+double vec::X() const
 {
     return x;
 }
 
-double vec::Y()
+double vec::Y() const
 {
     return y;
 }
@@ -124,4 +124,22 @@ bool sameSide(const vec &a, const vec &b, vec p1, vec p2)
     p2 -= a;
 
     return sameSide(ab, p1, p2);
+}
+
+bool liesOnVector(const vec &v, const vec &p, const double epsilon)
+{
+    double xScale = p.X() / v.X();
+
+    double yScale = p.Y() / v.Y();
+
+    return abs(xScale - yScale) < epsilon;
+}
+
+bool liesOnLine(const vec &a, const vec &b, vec p, const double epsilon)
+{
+    vec ab = b - a;
+
+    vec pp = p - a;
+
+    return liesOnVector(ab, pp, epsilon);
 }

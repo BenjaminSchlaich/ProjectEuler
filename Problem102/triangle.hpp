@@ -8,4 +8,4 @@ struct Triangle
     int ax, ay, bx, by, cx, cy;
 };
 
-bool contains(Triangle &t, int x, int y);
+bool contains(Triangle &t, int x, int y, bool strict = true);

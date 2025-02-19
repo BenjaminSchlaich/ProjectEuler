@@ -1,6 +1,8 @@
 
 #pragma once
 
+#define EPSILON_DEFAULT 0.00000001
+
 #include <iostream>
 
 class vec
@@ -16,9 +18,11 @@ class vec
 
     vec(double x, double y);
 
-    double X();
+    // returns the x-component
+    double X() const;
 
-    double Y();
+    // returns the y-component
+    double Y() const;
 
     void operator+=(double a);
 
@@ -58,3 +62,9 @@ bool sameSide(const vec &v, const vec &p1, const vec &p2);
 
 // returns whether p1 and p2 are on the same side of line ab
 bool sameSide(const vec &a, const vec &b, vec p1, vec p2);
+
+// returns whether point p lies on vector v,
+// where epsilon is the tolerance of the floating point equality chec k
+bool liesOnVector(const vec &v, const vec &p, const double epsilon = EPSILON_DEFAULT);
+
+bool liesOnLine(const vec &a, const vec &b, vec p, const double epsilon = EPSILON_DEFAULT);
