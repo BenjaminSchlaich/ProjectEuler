@@ -19,3 +19,10 @@ bool contains(Triangle &t, int x, int y, bool strict)
         && sameSide(b, c, a, p)
         && sameSide(a, c, b, p);
 }
+
+// Function to check if a point (x, y) is inside the rectangle
+inline bool containsRect(Rect &t, int x, int y)
+{
+    return t.x <= x && x <= t.x + t.w
+        && t.y <= y && y <= t.y + t.h;
+}
