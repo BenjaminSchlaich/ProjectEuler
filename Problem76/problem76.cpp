@@ -58,40 +58,34 @@ namespace std{
 
 using namespace std;
 
-static unordered_map<tuple<int, int, int>, int> memo;
+static unordered_map<tuple<int, int>, int> memo;
 
 /**
  * How many unique ways are there to sum up to n using exactly k >= 0 variables assuming values in {0, 1, ... , max}?
  */
-int sumsOf(int n, int k, int max)
+int sumsOf(int n, int max)
 {
-    if(k < 0)                       // by the definition of the problem this makes no sense
-        return 0;
-    else if(n < 0)                  // likewise doesn't make sense, since we don't have negative summands
+    if(n < 0)                  // likewise doesn't make sense, since we don't have negative summands
         return 0;
     else if(n == 0)                 // the only way to achieve this is to set all variables to 0
         return 1;
-    else if(k == 0 || max == 0)     // for n > 0 we would need some positive variables
-        return 0;
-    else if(n > k*max)              // this is a simple upper bound
+    else if(max == 0)               // for n > 0 we would need some positive variables
         return 0;
     else if(n == 1)                 // there is only one way here: set one first variable to one and the others to 0
-        return 1;
-    else if(k == 1)                 // there is only one way here: set the variable to n
         return 1;
     else
     {
         // try memoization
-        if(memo.contains({n, k, max}))
-            return memo.at({n, k, max});
+        if(memo.contains({n, max}))
+            return memo.at({n, max});
 
         int c = 0;
 
-        for(int x=0; x<=max; x++)
-            c += sumsOf(n - x, k - 1, x);
+        for(int x=1; x<=max; x++)
+            c += sumsOf(n - x, x);
         
         // add to memo
-        memo.insert({{n, k, max}, c});
+        memo.insert({{n, max}, c});
         
         return c;
     }
@@ -99,7 +93,7 @@ int sumsOf(int n, int k, int max)
 
 int solve()
 {
-    return sumsOf(100, 100, 100) - 1;
+    return sumsOf(100, 100) - 1;
 }
 
 /**

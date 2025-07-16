@@ -76,6 +76,8 @@
         "utility": "cpp",
         "format": "cpp",
         "*.inc": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "semaphore": "cpp",
+        "chrono": "cpp"
     }
 }
