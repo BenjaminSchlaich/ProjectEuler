@@ -1,9 +1,10 @@
 
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
+#include <functional>
 #include <unordered_map>
+#include <vector>
+
+#define MEMO true
 
 namespace std{
     namespace
@@ -62,30 +63,37 @@ static unordered_map<tuple<int, int>, int> memo;
 
 /**
  * How many unique ways are there to sum up to n using exactly k >= 0 variables assuming values in {0, 1, ... , max}?
+ * 
+ * NOTE:    SINCE MEMOIZATION WORKS INCREDIBLY WELL HERE, AND THERE IS DEFINITELY A CLEAR STRUCTURE FOR THE ACCESSES,
+ *          THE ALGORITHM SHOULD DEFINITELY BE CONVERTED TO A DP SOLUTION!
  */
 int sumsOf(int n, int max)
 {
-    if(n < 0)                  // likewise doesn't make sense, since we don't have negative summands
+    if(n < 0)               // likewise doesn't make sense, since we don't have negative summands
         return 0;
-    else if(n == 0)                 // the only way to achieve this is to set all variables to 0
+    else if(n == 0)         // the only way to achieve this is to set all variables to 0
         return 1;
-    else if(max == 0)               // for n > 0 we would need some positive variables
+    else if(max == 0)       // for n > 0 we would need some positive variables
         return 0;
-    else if(n == 1)                 // there is only one way here: set one first variable to one and the others to 0
+    else if(n == 1)         // there is only one way here: set one first variable to one and the others to 0
         return 1;
     else
     {
+        #if MEMO
         // try memoization
         if(memo.contains({n, max}))
             return memo.at({n, max});
+        #endif  // MEMO
 
         int c = 0;
 
         for(int x=1; x<=max; x++)
             c += sumsOf(n - x, x);
         
+        #if MEMO
         // add to memo
         memo.insert({{n, max}, c});
+        #endif  // MEMO
         
         return c;
     }
@@ -93,7 +101,7 @@ int sumsOf(int n, int max)
 
 int solve()
 {
-    return sumsOf(100, 100) - 1;
+    return sumsOf(100, 100) - 1;    // -1 is needed because we only allow two or more variables, so 100 itself doesn't count
 }
 
 /**
